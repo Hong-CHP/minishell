@@ -6,7 +6,7 @@
 #    By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/07 19:11:22 by hporta-c          #+#    #+#              #
-#    Updated: 2025/07/07 19:21:24 by hporta-c         ###   ########.fr        #
+#    Updated: 2025/07/09 16:29:00 by hporta-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,9 @@ CFLAGS = -Wall -Wextra -Werror -I$(LIBFT_DIR)
 LIBFT = $(LIBFT_DIR)/libft.a
 LIB = -lreadline
 
-SRCS = main.c
+SRCS = main.c command_list.c tokenize.c extract_cmd_args.c \
+		extract_cmd_args_by_quote.c \
+		utils_str.c tokenize_utils.c
 OBJS = $(SRCS:.c=.o)
 
 RM = rm -f
