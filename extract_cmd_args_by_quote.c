@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:20:20 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/09 19:17:36 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/11 16:53:46 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,85 +42,121 @@ char	*find_words_in_quote(char *content, char ch)
 	return (str);
 }
 
-void	find_start_end_idx_quote(int *s_i, int *e_i, char **cmds_split, char ch)
+int	find_next_quote_idx(char *str, char ch)
 {
 	int	i;
-	int	j;
-	
-	i = 0;
-	*s_i = -1;
-	*e_i = -1;
-	while (cmds_split[i][0] != ch)
-		i++;
-	if (cmds_split[i][0] == ch)
-		*s_i = i;
-	while (cmds_split[i])
+
+	i = 1;
+	while (str[i])
 	{
-		j = 0;
-		while (cmds_split[i][j])
+		if (str[i] == ch)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+char	*dup_str_without_quote(char *str, char ch)
+{
+	char	*word;
+	int	i;
+	int	j;
+
+	j = 0;
+	i = 0;
+	word = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!word)
+		return (NULL);
+	while (str[i])
+	{
+		if (str[i] != ch)
 		{
-			if (cmds_split[i][j] == ch)
-				*e_i = i;
+			word[j] = str[i];
 			j++;
 		}
 		i++;
 	}
+	word[j] = '\0';
+	return (word);
 }
 
-char    *find_words_and_idx(char *content, int *s_idx, int *e_idx, char **cmds_split)
+void	fill_args(char **split, t_command *cmd, char **set)
 {
-    char        ch;
-	char		*words;
-	//malloc in func find_sngle_quote, need to be free then
+	int	nb_wd;
+	int	i;
+	char ch;
+	int	j;
+	int	k;
+	char	*word;
+	//malloc need be free
+	char	*res;
+	//malloc need be free
 
-	if (if_quote(content) == 1)
-        ch = '\'';
-    else if (if_quote(content) == 2)
-        ch = '\"';
-    words = find_words_in_quote(content, ch);
-    find_start_end_idx_quote(s_idx, e_idx, cmds_split, ch);
-    return (words);
-}
-
-void    fill_args(t_command *cmd, char **split, char *content, int nb_wd)
-{
-    int     i;
-    int     j;
-    int     s_idx;
-	int     e_idx;
-    char    *words;
-    //malloc in func find_sngle_quote, need to be free then
-
-    words = find_words_and_idx(content, &s_idx, &e_idx, split);
-    i = 0;
-    j = 0;
-    while (split[i] && i < nb_wd)
-    {
-        if (i == s_idx)
-        {
-            cmd->args[j] = ft_strdup(words);
-            i = e_idx + 1;
-        }
-        else
-            cmd->args[j] = ft_strdup(split[i]);
-        i++;
-        j++;
-    }
-    cmd->args[j] = NULL;
-    free(words);
-}
-
-void    fill_args_if_quote(char *cnt, char **split, t_command *cmd, char **set)
-{
-    int         s_idx;
-	int         e_idx;
-    int         nb_wd;
-
-    find_words_and_idx(cnt, &s_idx, &e_idx, split);
-    nb_wd = count_utill_charset(split, set);
-    nb_wd -= (e_idx - s_idx);
-    cmd->args = (char **)malloc(sizeof(char *) * (nb_wd + 1));
+	nb_wd = count_utill_charset(split, set);
+	cmd->args = (char **)malloc(sizeof(char *) * (nb_wd + 1));
 	if (!cmd->args)
 		return ;
-    fill_args(cmd, split, cnt, nb_wd);
+	i = 0;
+	j = 0;
+	k = 0;
+	res = ft_strdup("");
+	while (split[i] && i < nb_wd)
+	{
+		if (if_quote(split[i]) != 0)
+		{
+			ch = if_quote(split[i]);
+			if ((split[i][0] == '\'' || split[i][0] == '\"')
+				&& (split[i][0] == split[i][ft_strlen(split[i]) - 1]))
+				{
+					cmd->args[k] = find_words_in_quote(split[i], ch);
+					k++;
+				}
+			else if ((split[i][0] == '\'' || split[i][0] == '\"')
+				&& (split[i][0] != split[i][ft_strlen(split[i]) - 1]))
+				{
+					j = i;
+					while (split[j] && split[j][ft_strlen(split[j]) - 1] != ch)
+					{
+						if (split[j][0] == ch)
+							word = supp_quote_add_space(split[j]);
+						else
+						{
+							word = ft_strdup(split[j]);
+							word = ft_strjoin(word, " ");
+						}
+						res = ft_strjoin(res, word);
+						printf("the word is: %s, the res is %s\n", word, res);
+						free(word);
+						j++;
+					}
+					if (split[j])
+					{
+						printf("hehe, here is last quote word\n");
+						word = supp_last_quote(split[j]);
+						printf("last quote word is %s\n", word);
+						res = ft_strjoin(res, word);
+						cmd->args[k] = res;
+						printf("the word is: %s, the res is %s\n", word, res);
+						free(word);
+						k++;
+					}
+					i = j;
+				}
+			else
+			{
+				cmd->args[k] = dup_str_without_quote(split[i], ch);
+				k++;
+			}
+		}
+		else
+		{
+			cmd->args[k] = ft_strdup(split[i]);
+			k++;
+		}
+		i++;
+	}
+	cmd->args[k] = NULL;
+	i = 0;
+	while (cmd->args[i])
+		printf("args is %s\n", cmd->args[i++]);
 }

@@ -1,0 +1,19 @@
+cat -e hello world pp(ok)
+
+cat -e hello "world" pp(ok)
+
+cat -e "hello" "world" pp(ok)
+
+cat -e "hello" oo "world" pp(ok)
+
+cat -e pp 'hello' world (ok)
+
+cat -e ch "hello oo 'world'" pp (ok)
+
+cat -e 'hello'world (ok)
+
+cat -e hello'world' (ok)
+
+cat -e split'hello'world (no)
+
+cat -e split'hello'world "hello" pp (ok)
