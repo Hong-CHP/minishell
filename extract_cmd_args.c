@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 15:52:39 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/11 15:32:42 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/14 16:05:41 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	**set_charset(char **charset)
 
 char	**extract_cmd_args(char **cmds_split, char *content, t_command *command)
 {
-	(void)content;
+	(void)	content;
 	char	**charset;
 	//malloc need to be free then
 	

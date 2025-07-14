@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:42:48 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/09 19:25:18 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/14 16:54:31 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int argc, char **argv)
 	
 	if (argc != 1)
 		return (1);
-	input = readline("minishell>>");
+	input = readline("\1\033[1;33m\2minishell\1\033[0m\2>");
 	while (input)
 	{
 		if (*input)
@@ -48,7 +48,7 @@ int	main(int argc, char **argv)
 			break ;
 		}
 		free(input);
-		input = readline("minishell>>");
+		input = readline("\1\033[1;33m\2minishell\1\033[0m\2>");
 	}
 	printf("exit\n");
 	return (0);

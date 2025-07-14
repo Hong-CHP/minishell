@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:21:34 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/09 19:32:07 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/14 16:19:30 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ t_command	*tokenize_cmd(t_command *command, char *content)
 
 	printf("---------------------\n");
 	printf("content of command is : %s\n", content);
+	if (if_equal(content))
+		init_registre_variable(content);
 	cmds_split = ft_split(content, ' ');
 	i = 0;
 	while (cmds_split[i])

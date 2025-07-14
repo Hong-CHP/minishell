@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:43:15 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/11 15:31:19 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/14 16:40:22 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,21 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+typedef struct s_localvar
+{
+	char	*var;
+	char	*val;
+	char	*value;
+}				t_localvar;
+
 typedef struct	s_command
 {
 	char	*cmd;
 	char	**args;
 	char	*infile;
 	char	*outfile;
-	int	 append;
-	int	 here_doc;
+	int		append;
+	int		here_doc;
 }				t_command;
 
 typedef struct	s_cmdlist
@@ -35,10 +42,12 @@ typedef struct	s_cmdlist
 	struct	s_cmdlist	*next;
 }				t_cmdlist;
 
-int	count_words(char *str, char c);
-int ft_strcmp(char *s1, char *s2);
-int if_pipex(char *input);
+int		count_words(char *str, char c);
+int 	ft_strcmp(char *s1, char *s2);
+int 	if_pipex(char *input);
 int		if_quote(char *str);
+int		if_equal(char *str);
+t_localvar 	*init_registre_variable(char *content);
 void	free_split(char **strs);
 t_cmdlist	*create_cmds_list(t_cmdlist *head, char *input);
 t_command	*tokenize_cmd(t_command *command, char *cmd);

@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 14:33:50 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/11 15:43:00 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/14 15:57:15 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,20 @@ int		if_quote(char *str)
 			return ((int)'\'');
 		else if (str[i] == '\"')
 			return ((int)'\"');
+		i++;
+	}
+	return (0);
+}
+
+int		if_equal(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '=')
+			return (1);
 		i++;
 	}
 	return (0);

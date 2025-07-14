@@ -6,7 +6,7 @@
 #    By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/07 19:11:22 by hporta-c          #+#    #+#              #
-#    Updated: 2025/07/10 18:03:42 by hporta-c         ###   ########.fr        #
+#    Updated: 2025/07/14 16:06:13 by hporta-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 LIB = -lreadline
 
 SRCS = main.c command_list.c tokenize.c extract_cmd_args.c \
-		extract_cmd_args_by_quote.c \
+		variable_value.c extract_cmd_args_by_quote.c \
 		utils_str.c tokenize_utils.c
 OBJS = $(SRCS:.c=.o)
 
