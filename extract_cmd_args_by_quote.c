@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:20:20 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/11 16:53:46 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/14 08:40:52 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,19 @@ char	*find_words_in_quote(char *content, char ch)
 	return (str);
 }
 
-int	find_next_quote_idx(char *str, char ch)
-{
-	int	i;
+// int	find_next_quote_idx(char *str, char ch)
+// {
+// 	int	i;
 
-	i = 1;
-	while (str[i])
-	{
-		if (str[i] == ch)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
+// 	i = 1;
+// 	while (str[i])
+// 	{
+// 		if (str[i] == ch)
+// 			return (i);
+// 		i++;
+// 	}
+// 	return (-1);
+// }
 
 char	*dup_str_without_quote(char *str, char ch)
 {
@@ -78,6 +78,20 @@ char	*dup_str_without_quote(char *str, char ch)
 	}
 	word[j] = '\0';
 	return (word);
+}
+
+int	find_dollar_pos(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			return (i);
+		i++;
+	}
+	return (0);
 }
 
 void	fill_args(char **split, t_command *cmd, char **set)
@@ -108,6 +122,11 @@ void	fill_args(char **split, t_command *cmd, char **set)
 			if ((split[i][0] == '\'' || split[i][0] == '\"')
 				&& (split[i][0] == split[i][ft_strlen(split[i]) - 1]))
 				{
+					if (ch == '\"')
+					{
+						find_dollar_pos(split[i]);
+						
+					}
 					cmd->args[k] = find_words_in_quote(split[i], ch);
 					k++;
 				}
