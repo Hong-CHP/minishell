@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 15:54:45 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/15 18:01:23 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/21 16:50:58 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,9 @@ t_variable 	*init_registre_variable(char *content)
 	ft_memset(local_v, 0, sizeof(t_variable));
 	value = NULL;
 	if (if_export_variable(content))
+	{
 		local_v->exported = 1;
+	}
 	registre_var_val(content, local_v, value);
 	free(value);
 	return (local_v);

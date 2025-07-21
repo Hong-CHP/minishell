@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:43:15 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/15 18:05:32 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/21 18:41:51 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	*supp_last_quote(char *str);
 t_variable 	*init_registre_variable(char *content);
 //variable_list.c
 void	clean_var_list(t_varlist **head);
-void	create_var_list(t_varlist **head, char *input);
+void    create_var_list_or_find_node(t_varlist **head, char *input, t_variable *var_node);
 //variable_utils.c 
 int		if_export_variable(char *content);
 int		no_quote_no_space(char *str);
