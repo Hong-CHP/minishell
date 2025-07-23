@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 16:48:11 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/21 19:16:39 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/23 17:16:02 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,9 @@ int ft_list_size(t_varlist **head)
 void    find_var_node_modif_val(t_variable *modif_var_node, char *match, char *input)
 {
     char *find_val;
+    (void)input;
 
-    find_val = ft_substr(input, match - input + 1, ft_strlen(input));
+    find_val = ft_strdup(match + 1);
     if (!find_val)
         return ;
     if (modif_var_node->val)
@@ -81,10 +82,19 @@ void	create_var_list(t_varlist **head, char *input)
 {
 	t_varlist	*var_node;
 
+    if (!check_input_var_val(input))
+        return ;
     var_node = malloc(sizeof(t_varlist));
     if (!var_node)
         return ;
-    var_node->var_data = init_registre_variable(input);
+    var_node->var_data = malloc(sizeof(t_variable));
+	if (!var_node->var_data)
+    {
+        free(var_node);
+		return ;
+    }
+	ft_memset(var_node->var_data, 0, sizeof(t_variable));
+    init_registre_variable(var_node->var_data, input);
     var_node->next = NULL;
     add_var_lst_front(head, var_node);
 }
@@ -115,8 +125,8 @@ void    process_var_val_export(t_varlist **head, char *input, t_variable *var_no
 
 void    create_var_list_or_find_node(t_varlist **head, char *input, t_variable *var_node)
 {
-    char *match_var;
-    char   *find_var;
+    char    *match_var;
+    char    *find_var;
 
     match_var = NULL;
     find_var = NULL;
@@ -138,11 +148,11 @@ void    create_var_list_or_find_node(t_varlist **head, char *input, t_variable *
         else
             create_var_list(head, input);
     }
-    t_varlist	*cur;
-    cur = *head;
-    while (cur)
-    {
-        printf("var_node data are: %s, %s, %d\n", cur->var_data->var, cur->var_data->val,  cur->var_data->exported);
-        cur = cur->next;
-    }
 }
+    // t_varlist	*cur;
+    // cur = *head;
+    // while (cur)
+    // {
+    //     printf("var_node data are: %s, %s, %d\n", cur->var_data->var, cur->var_data->val,  cur->var_data->exported);
+    //     cur = cur->next;
+    // }

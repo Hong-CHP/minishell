@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 11:21:08 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/15 17:16:41 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/23 14:24:47 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,36 +29,39 @@ void	clean_cmdlist(t_cmdlist **head)
 	*head = NULL;
 }
 
-t_cmdlist    *fill_cmd_node_content(t_cmdlist *cmd_node, char *single_cmd)
+int    fill_cmd_node_content(t_cmdlist *cmd_node, char *single_cmd)
 {
 	if (!single_cmd)
-		return (NULL);
-	cmd_node->command = (t_command *)malloc(sizeof(t_command));
+		return (0);
+	tokenize_cmd(cmd_node, single_cmd);
 	if (!cmd_node->command)
+	{
+		free(cmd_node->command);
+		return (0);
+	}
+	return (1);
+}
+
+t_cmdlist	*new_cmd_node(char *single_cmd, t_varlist **head_var)
+{
+	t_cmdlist	*cmd_node;
+
+	printf("2.head var ptr is %p\n", head_var);
+	cmd_node = (t_cmdlist *)malloc(sizeof(t_cmdlist));
+	if (!cmd_node)
+		return (NULL);
+	if (head_var && *head_var)
+		cmd_node->var_list = *head_var;
+	else
+	{
+		printf("enter here\n");
+		cmd_node->var_list = NULL;
+	}
+	if (!fill_cmd_node_content(cmd_node, single_cmd))
 	{
 		free(cmd_node);
 		return (NULL);
 	}
-	ft_memset(cmd_node->command, 0, sizeof(t_command));
-	cmd_node->command = tokenize_cmd(cmd_node->command, single_cmd);
-	if (!cmd_node->command)
-	{
-		free(cmd_node->command);
-		return (NULL);
-	}
-	return (cmd_node);
-}
-
-t_cmdlist	*new_cmd_node(char *single_cmd)
-{
-	t_cmdlist	*cmd_node;
-	
-	cmd_node = (t_cmdlist *)malloc(sizeof(t_cmdlist));
-	if (!cmd_node)
-		return (NULL);
-	fill_cmd_node_content(cmd_node, single_cmd);
-	if (!cmd_node)
-		return (NULL);
 	cmd_node->next = NULL;
 	return (cmd_node);
 }
@@ -79,7 +82,7 @@ void	add_cmdlist_back(t_cmdlist **head, t_cmdlist *cmd_node)
 	}
 }
 
-t_cmdlist	*create_cmds_list(t_cmdlist *head, char *input)
+t_cmdlist	*create_cmds_list(t_cmdlist *head, char *input, t_varlist **head_var)
 {
 	// t_cmdlist	*head;
 	t_cmdlist	*cmd_node;
@@ -87,14 +90,14 @@ t_cmdlist	*create_cmds_list(t_cmdlist *head, char *input)
 	//malloc split need to be free then
 	int	i;
 
-	// head = NULL;
+	printf("1.head var ptr is %p\n", head_var);
 	cmds_pipex = ft_split(input, '|');
 	if (!cmds_pipex)
 		return (NULL);
 	i = 0;
 	while (cmds_pipex[i])
 	{
-		cmd_node = new_cmd_node(cmds_pipex[i]);
+		cmd_node = new_cmd_node(cmds_pipex[i], head_var);
 		if (!cmd_node)
 		{
 			clean_cmdlist(&head);

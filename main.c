@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:42:48 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/21 18:37:28 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/23 17:04:48 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,24 @@ void	minishell(char *input, t_varlist **head_var)
 		return ;
 	head_cmd = NULL;
 	var_node = NULL;
+	if (head_var)
+	{
+		t_varlist *cur = *head_var;
+		while(cur)
+		{
+			printf("cur content: %s = %s\n", cur->var_data->var, cur->var_data->val);
+			cur = cur->next;
+		}
+	}
 	if (if_equal(input) || if_export_variable(input))
 		create_var_list_or_find_node(head_var, input, var_node);
 	else
 	{
-		head_cmd = create_cmds_list(head_cmd, input);
+		printf("0.head var ptr is %p\n", head_var);
+		head_cmd = create_cmds_list(head_cmd, input, head_var);
 		if (!head_cmd)
 			return ;
 	}
-	clean_cmdlist(&head_cmd);
 }
 
 int	main(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 16:48:51 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/15 16:50:37 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/22 16:14:57 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,20 @@ char	*if_variable_var(char *content)
 		return (NULL);
 	ft_memset(var, 0, count_var + 1);
 	return (var);
+}
+
+int	check_input_var_val(char *input)
+{
+	int	i;
+
+	i = 0;
+	if (if_export_variable(input))
+		i += 7;
+	while (input[i] && input[i] != '=')
+	{
+		if (input[i] < 'A' || input[i] > 'Z')
+			return (0);
+		i++;
+	}
+	return (1);
 }

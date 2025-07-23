@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:20:20 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/14 10:49:08 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/23 16:46:24 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,6 @@ char	*find_words_in_quote(char *content, char ch)
 	ft_strlcpy(str, &(content[start]), i - start + 1);
 	return (str);
 }
-
-// int	find_next_quote_idx(char *str, char ch)
-// {
-// 	int	i;
-
-// 	i = 1;
-// 	while (str[i])
-// 	{
-// 		if (str[i] == ch)
-// 			return (i);
-// 		i++;
-// 	}
-// 	return (-1);
-// }
 
 char	*dup_str_without_quote(char *str, char ch)
 {
@@ -94,7 +80,7 @@ int	find_dollar_pos(char *str)
 	return (0);
 }
 
-void	fill_args(char **split, t_command *cmd, char **set)
+void	fill_args(char **split, t_cmdlist *cmd_node, char **set)
 {
 	int	nb_wd;
 	int	i;
@@ -106,9 +92,10 @@ void	fill_args(char **split, t_command *cmd, char **set)
 	char	*res;
 	//malloc need be free
 
+	printf("5.head var ptr is %p\n", cmd_node->var_list);
 	nb_wd = count_utill_charset(split, set);
-	cmd->args = (char **)malloc(sizeof(char *) * (nb_wd + 1));
-	if (!cmd->args)
+	cmd_node->command->args = (char **)malloc(sizeof(char *) * (nb_wd + 1));
+	if (!cmd_node->command->args)
 		return ;
 	i = 0;
 	j = 0;
@@ -122,12 +109,9 @@ void	fill_args(char **split, t_command *cmd, char **set)
 			if ((split[i][0] == '\'' || split[i][0] == '\"')
 				&& (split[i][0] == split[i][ft_strlen(split[i]) - 1]))
 				{
-					if (ch == '\"')
-					{
-						find_dollar_pos(split[i]);
-						
-					}
-					cmd->args[k] = find_words_in_quote(split[i], ch);
+					if (ch == '\"' && if_dollar_sign(split[i]) != 0)
+						word = reg_dollar(split[i], cmd_node);
+					cmd_node->command->args[k] = find_words_in_quote(split[i], ch);
 					k++;
 				}
 			else if ((split[i][0] == '\'' || split[i][0] == '\"')
@@ -143,6 +127,11 @@ void	fill_args(char **split, t_command *cmd, char **set)
 							word = ft_strdup(split[j]);
 							word = ft_strjoin(word, " ");
 						}
+						if (ch == '\"' && if_dollar_sign(word) != 0)
+						{
+							word = reg_dollar(word, cmd_node);
+							word = ft_strjoin(word, " ");
+						}
 						res = ft_strjoin(res, word);
 						printf("the word is: %s, the res is %s\n", word, res);
 						free(word);
@@ -153,8 +142,10 @@ void	fill_args(char **split, t_command *cmd, char **set)
 						printf("hehe, here is last quote word\n");
 						word = supp_last_quote(split[j]);
 						printf("last quote word is %s\n", word);
+						if (ch == '\"' && if_dollar_sign(word) != 0)
+							word = reg_dollar(word, cmd_node);
 						res = ft_strjoin(res, word);
-						cmd->args[k] = res;
+						cmd_node->command->args[k] = res;
 						printf("the word is: %s, the res is %s\n", word, res);
 						free(word);
 						k++;
@@ -163,19 +154,19 @@ void	fill_args(char **split, t_command *cmd, char **set)
 				}
 			else
 			{
-				cmd->args[k] = dup_str_without_quote(split[i], ch);
+				cmd_node->command->args[k] = dup_str_without_quote(split[i], ch);
 				k++;
 			}
 		}
 		else
 		{
-			cmd->args[k] = ft_strdup(split[i]);
+			cmd_node->command->args[k] = ft_strdup(split[i]);
 			k++;
 		}
 		i++;
 	}
-	cmd->args[k] = NULL;
+	cmd_node->command->args[k] = NULL;
 	i = 0;
-	while (cmd->args[i])
-		printf("args is %s\n", cmd->args[i++]);
+	while (cmd_node->command->args[i])
+		printf("args is %s\n", cmd_node->command->args[i++]);
 }

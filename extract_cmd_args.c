@@ -6,7 +6,7 @@
 /*   By: hporta-c <hporta-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 15:52:39 by hporta-c          #+#    #+#             */
-/*   Updated: 2025/07/14 16:05:41 by hporta-c         ###   ########.fr       */
+/*   Updated: 2025/07/23 13:56:12 by hporta-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,21 @@ char	**set_charset(char **charset)
 	return (charset);
 }
 
-char	**extract_cmd_args(char **cmds_split, char *content, t_command *command)
+char	**extract_cmd_args(char **cmds_split, char *content, t_cmdlist *cmd_node)
 {
 	(void)	content;
 	char	**charset;
 	//malloc need to be free then
 	
+		printf("4.head var ptr is %p\n", cmd_node->var_list);
 	charset = set_charset(NULL);
-	fill_args(cmds_split, command, charset);
+	fill_args(cmds_split, cmd_node, charset);
     int i = 0;
-    while (command->args[i])
+    while (cmd_node->command->args[i])
     {
-        printf("command->args is : %s\n", command->args[i]);
+        printf("cmd_node->command->args is : %s\n", cmd_node->command->args[i]);
         i++;
     }
 	free(charset);
-	return (command->args);
+	return (cmd_node->command->args);
 }
